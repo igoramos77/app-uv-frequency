@@ -99,64 +99,25 @@ export const CardsHome = styled.View`
   margin-top: -50px;
 `;
 
-export const ButtonNavegate = styled.View`
+export const ButtonNavegate = styled.TouchableOpacity`
+  display: flex;
+  align-items: center;
   background: #fff;
-  padding: 16px;
+  padding: ${RFValue(16)}px;
   display: flex;
   border-radius: 8px;
-  width: 48%;
+  width: 31%;
 `;
 
 export const IconCardContainer = styled.View`
-  background: #ccc;
   display: flex;
-  border-radius: 50px;
-  width: 40%;
-`;
-
-export const CardsContainer = styled.ScrollView.attrs({
-  horizontal: true,
-  showsHorizontalScrollIndicator: false,
-  contentContainerStyle: {
-    paddingRight: 30,
-  }
-})`
-  position: absolute;
-  margin-top: ${RFPercentage(22)}px;
-  padding: 0 24px;
-  display: flex;
-  flex-direction: row;
-  margin-right: 16px;
-  width: 100%;
-`;
-
-export const LastActivesTitle = styled.Text`
-  padding: 0 24px;
-  margin: 60px 0 10px 0;   
-  font-size: ${RFValue(16)}px;
-  color: ${props => props.theme.colors.title};
-  font-family: ${props => props.theme.fonts.medium};
-`;
-
-export const LastActivesContent = styled.ScrollView.attrs({
-  horizontal: false,
-  showsHorizontalScrollIndicator: false,
-  contentContainerStyle: {
-    paddingBottom: getBottomSpace() + 10,
-  }
-})`
-  padding: 0 24px;
-`;
-
-export const BtnViewMore = styled(TouchableOpacity)`
-  background: #ccc;
-  width: 100%;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 16px;
-  margin-top: 16px;
-  border-radius: 5px;
+  justify-content: center;
+  background: ${props => props.theme.colors.background}70;
+  border-radius: ${RFPercentage(50)}px;
+  width: ${RFValue(50)}px;
+  height: ${RFValue(50)}px;
+  margin-bottom: ${RFValue(8)}px;
 `;
 
 export const NotFound = styled.Text`

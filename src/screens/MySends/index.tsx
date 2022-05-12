@@ -4,8 +4,6 @@ import { Text, Alert, Modal } from 'react-native';
 
 import api from '../../services/api';
 
-import LastActivesCard from '../../Componets/LastActivesCard';
-
 import { 
   Container,
   LastActivesContent,
