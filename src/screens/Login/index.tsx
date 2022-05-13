@@ -1,11 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+
+import Feather from '@expo/vector-icons/build/Feather';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 import api from '../../services/api';
 
 import {Text, Image, Alert} from 'react-native';
 
-import Feather from '@expo/vector-icons/build/Feather';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Logo from '../../../assets/logo1.svg';
 import Input from '../../Componets/Forms/Input';
 import Button from '../../Componets/Forms/Button';
@@ -26,6 +28,8 @@ interface IUserProps {
 const Login: React.FC = () => {
   const { signIn } =  useAuth();
 
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+
   const [matricula, setMatricula] = useState('');
   const [senha, setSenha] = useState('');
   const [loadingLogin, setLoadingLogin] = useState(false);
@@ -43,34 +47,9 @@ const Login: React.FC = () => {
           headers: { Authorization: `Bearer ${responseToken.data.access}` }
         });  
         console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
-        console.log('================================================================================')
         console.log(responseUser.data)
         console.log(responseUser.data[0].id)
 
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
         console.log('>>>>>>>>>>>>>>>>>>>>>> fim >>>>>>>>>>>>>>>>>>>>>>>>>>')
 
         signIn(
@@ -94,6 +73,18 @@ const Login: React.FC = () => {
     }
     loadData();
   }, [matricula, senha]);
+
+  useEffect(() => {
+    (async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupported(compatible);
+      if (!compatible) {
+       alert("Dispositivo incompatível com biometria/faceID.") 
+      } else {
+        await LocalAuthentication.authenticateAsync();
+      }
+    })();
+  }, []);
 
   return (
     <Container>

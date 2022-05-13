@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -49,7 +48,6 @@ const Dashboard: React.FC = () => {
     }, [])
   );
 
-
   const confirmLogout = () => {
     return Alert.alert(
       "Deseja descontectar do App?",
@@ -95,12 +93,7 @@ const Dashboard: React.FC = () => {
       </Header>
 
       <CardsHome>
-        <ButtonNavegate activeOpacity={1} onPress={() => {
-          navigation.navigate('MySends', {
-            screen: 'MySends',
-            initial: false,
-          });
-        }} >
+        <ButtonNavegate activeOpacity={1} onPress={() => alert("a")} >
           <IconCardContainer>
             <Feather size={30} color="#751c20" name="user-check" />
           </IconCardContainer>
@@ -114,7 +107,7 @@ const Dashboard: React.FC = () => {
         </ButtonNavegate>
         <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }}>
           <IconCardContainer>
-            <Feather size={30} color="#751c20" name="settings" />
+            <Feather size={30} color="#751c20" name="settings" onPress={() => setProfileIsVisible(true)} />
           </IconCardContainer>
           <Text>Ajustes</Text>
         </ButtonNavegate>
