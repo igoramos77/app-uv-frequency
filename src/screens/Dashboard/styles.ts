@@ -96,7 +96,7 @@ export const CardsHome = styled.View`
   flex-direction: row;
   justify-content: space-between;
   padding: 16px;
-  margin-top: -50px;
+  margin-top: -70px;
 `;
 
 export const ButtonNavegate = styled.TouchableOpacity`

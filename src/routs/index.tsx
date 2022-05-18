@@ -9,7 +9,7 @@ export function Routes() {
   const {logged} = useAuth();
 
   useEffect(() => {
-    console.log('dentro do routs: ', logged)
+    console.log('dentro do routs: ', logged);
   }, [logged]);
 
   return (
