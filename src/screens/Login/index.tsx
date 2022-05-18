@@ -1,31 +1,24 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
-import api from '../../services/api';
-
-import { Text, Image, Alert } from 'react-native';
+import { useAuth } from '../../hooks/auth';
 
 import Feather from '@expo/vector-icons/build/Feather';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Logo from '../../../assets/logo1.svg';
+import * as LocalAuthentication from 'expo-local-authentication';
+
+import api from '../../services/api';
+
 import Input from '../../Componets/Forms/Input';
 import Button from '../../Componets/Forms/Button';
 
 import { Container, Header, TitleContent, H1, Form, FormControl, Footer } from './styles';
-import { useAuth } from '../../hooks/auth';
+
+import { Text, Image, Alert } from 'react-native';
+
 import axios from 'axios';
 
-interface IUserProps {
-  id: number,
-  first_name: string,
-  last_name: string,
-  matricula: string,
-  email: string,
-  foto: string,
-  curso: number,
-}[]
-
 const Login: React.FC = () => {
-  const { signIn } = useAuth();
+  const { signIn, setLogged } = useAuth();
 
   const [matricula, setMatricula] = useState('');
   const [senha, setSenha] = useState('');
@@ -61,12 +54,38 @@ const Login: React.FC = () => {
     }
   }, [matricula, senha]);
 
+  const onFaceId = async () => {
+    try {
+      // Checking if device is compatible
+      const isCompatible = await LocalAuthentication.hasHardwareAsync();
+
+      if (!isCompatible) {
+        throw new Error('Seu dispositivo não suporta autenticação por reconhecimento facial ou FaceID.')
+      }
+
+      // Checking if device has biometrics records
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+      if (!isEnrolled) {
+        throw new Error('Usuário ou senha inválidos.')
+      }
+
+      // Authenticate user
+      const isAuth =  await LocalAuthentication.authenticateAsync();
+
+      if (isAuth.success) {
+        setLogged(true);
+      }
+    } catch (error: any) {
+      Alert.alert('Erro: ', error?.message);
+    }
+  };
+
   return (
     <Container>
       <KeyboardAwareScrollView extraHeight={150}>
         <Header colors={['#781E20', '#781E20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
           <TitleContent>
-            {/*<Logo style={{marginBottom: 40}} />*/}
             <H1>Controle a presença</H1>
             <H1>de seus alunos de</H1>
             <H1>forma muito simples</H1>
@@ -75,7 +94,7 @@ const Login: React.FC = () => {
 
         <Form>
           <FormControl>
-            <Input placeholder="Matrícula" keyboardType='number-pad' onChangeText={(text) => setMatricula(text)} />
+            <Input placeholder="Matrícula" keyboardType='number-pad' onChangeText={(text) => setMatricula(text)} onFocus={onFaceId} />
             <Feather size={24} color="#CBD1EB" name="user" style={{ position: 'absolute', zIndex: 99999, right: 16 }} />
           </FormControl>
           <FormControl>

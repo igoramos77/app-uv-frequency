@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
-
 import { useFocusEffect } from '@react-navigation/native';
 
 import { Text, Alert, Modal } from 'react-native';
 
-
-import api from '../../services/api';
 
 import Profile from '../Profile';
 
@@ -37,8 +33,6 @@ import MySends from '../MySends';
 
 
 const Dashboard: React.FC = () => {
-  const navigation = useNavigation();
-
   const { signOut, user } = useAuth();
   const [profileIsVisible, setProfileIsVisible] = useState(false);
 
@@ -74,7 +68,7 @@ const Dashboard: React.FC = () => {
       <Header colors={['#a03c3e', '#771e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
         <UserContainer>
           <UserInfo onPress={() => setProfileIsVisible(true)}>
-            <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://github.com/tassioferenzini.png" }} />
+            <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
             <UserSaudation>
               <FirstSaudation>Olá, <UserName>Tassio!</UserName></FirstSaudation>
               <Matricule>Matrícula: 12345678</Matricule>
