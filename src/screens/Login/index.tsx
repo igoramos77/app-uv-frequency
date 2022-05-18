@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/auth';
 import Feather from '@expo/vector-icons/build/Feather';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as LocalAuthentication from 'expo-local-authentication';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import api from '../../services/api';
 
@@ -23,6 +24,22 @@ const Login: React.FC = () => {
   const [matricula, setMatricula] = useState('');
   const [senha, setSenha] = useState('');
   const [loadingLogin, setLoadingLogin] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const storageValue = await AsyncStorage.getItem('@user');
+        if (storageValue !== null) {
+          let storageUser = await JSON.parse(storageValue);
+          setMatricula(storageUser.matricula);
+          setSenha(storageUser.password);
+        }
+      } catch (e) {
+        setMatricula('');
+        setSenha('');
+      }
+    })();
+  }, []);
 
   const handleLogin = useCallback(async () => {
     try {
@@ -48,6 +65,11 @@ const Login: React.FC = () => {
         await response.data.token,
         await response.data.expires_in,
       );
+
+      if (response.status === 200) {
+        await AsyncStorage.setItem('@user', JSON.stringify({ matricula: matricula, password: senha }))
+      }
+
     } catch (error: any) {
       console.log(error);
       Alert.alert('Matrícula ou senha inválidos!');
@@ -56,6 +78,11 @@ const Login: React.FC = () => {
 
   const onFaceId = async () => {
     try {
+      const storageValue = await AsyncStorage.getItem('@user');
+      if (!storageValue ) {
+        return;
+      }
+
       // Checking if device is compatible
       const isCompatible = await LocalAuthentication.hasHardwareAsync();
 
@@ -71,11 +98,16 @@ const Login: React.FC = () => {
       }
 
       // Authenticate user
-      const isAuth =  await LocalAuthentication.authenticateAsync();
+      const isAuth = await LocalAuthentication.authenticateAsync({
+        promptMessage: '😊',
+        fallbackLabel: 'Informe sua senha',
+        cancelLabel: 'Cancelar',
+      });
 
       if (isAuth.success) {
-        setLogged(true);
+        await handleLogin();
       }
+
     } catch (error: any) {
       Alert.alert('Erro: ', error?.message);
     }

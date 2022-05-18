@@ -38,7 +38,8 @@ const Dashboard: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-
+      console.log('Dashboard ==================================================');
+      console.log(user);      
     }, [])
   );
 
@@ -70,8 +71,8 @@ const Dashboard: React.FC = () => {
           <UserInfo onPress={() => setProfileIsVisible(true)}>
             <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
             <UserSaudation>
-              <FirstSaudation>Olá, <UserName>Tassio!</UserName></FirstSaudation>
-              <Matricule>Matrícula: 12345678</Matricule>
+              {user.name && <FirstSaudation>Olá, <UserName>{user?.name.split(' ')[0]}!</UserName></FirstSaudation>}
+              <Matricule>Matrícula: {user.matricula}</Matricule>
             </UserSaudation>
             <Modal visible={profileIsVisible} >
               <CloseModal>

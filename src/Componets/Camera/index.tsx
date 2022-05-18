@@ -4,7 +4,6 @@ import {StatusBar} from 'expo-status-bar';
 
 import {Camera} from 'expo-camera';
 import Feather from '@expo/vector-icons/build/Feather';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let camera: Camera;
 
