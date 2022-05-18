@@ -95,12 +95,7 @@ const Dashboard: React.FC = () => {
       </Header>
 
       <CardsHome>
-        <ButtonNavegate activeOpacity={1} onPress={() => {
-          navigation.navigate('MySends', {
-            screen: 'MySends',
-            initial: false,
-          });
-        }} >
+        <ButtonNavegate activeOpacity={1}>
           <IconCardContainer>
             <Feather size={30} color="#751c20" name="user-check" />
           </IconCardContainer>

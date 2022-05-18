@@ -2,29 +2,33 @@ import React, { createContext, useState, useContext, useCallback, useEffect } fr
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface IUserProps {
+export interface IUserProps {
   id: number,
-  first_name: string,
-  last_name: string,
+  name: string,
   matricula: string,
   email: string,
-  foto: string,
-  curso: number,
+  photoUrl: string,
+  courseId: string,
+  token: string,
+  expires_in: string,
 }
+
 interface IAuthContext {
   logged: boolean;
+
   signIn(
     id: number,
-    first_name: string,
-    last_name: string,
+    name: string,
     matricula: string,
     email: string,
-    foto: string,
-    curso: number,
+    photoUrl: string,
+    courseId: string,
     token: string,
-    refresh_token: string,
+    expires_in: string,
   ): void;
+
   signOut(): void;
+
   user: IUserProps;
 }
 
@@ -36,27 +40,29 @@ const AuthProvider: React.FC = ({ children }) => {
 
  /* mantem logado  
   const [logged, setLogged] = useState<boolean>(() => {
-    const isLogged = AsyncStorage.getItem('@summa:logged');
+    const isLogged = AsyncStorage.getItem('@logged');
     return !!isLogged;
   }); */
 
-  const signIn = useCallback((id, first_name, last_name, matricula, email, foto, curso, token, refresh_token) => {
-    AsyncStorage.setItem('@summa:token', JSON.stringify({token: token, refresh_token: refresh_token,}));
+  const signIn = useCallback(async (id, name, matricula, email, photoUrl, courseId, token, expires_in) => {
+    await AsyncStorage.setItem('@token', JSON.stringify({ token: token, expires_in: expires_in }));
+
     setUser({
       id: id,
-      first_name: first_name,
-      last_name: last_name,
+      name: name,
       matricula: matricula,
       email: email,
-      foto: foto,
-      curso: curso
+      photoUrl: photoUrl,
+      courseId: courseId,
+      token: token,
+      expires_in: expires_in,
     })
     
     setLogged(true);
   }, []);
 
   const signOut = useCallback(() => {
-    AsyncStorage.removeItem('@summa:token');
+    AsyncStorage.removeItem('@token');
     setLogged(false);
   }, []);
 

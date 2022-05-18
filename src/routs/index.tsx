@@ -15,9 +15,9 @@ export function Routes() {
   return (
     <NavigationContainer>
       {logged ?
-        <AuthRoutes />
-        :
         <AppRoutes />
+        :
+        <AuthRoutes />
       }
     </NavigationContainer>
   )
