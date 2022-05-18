@@ -23,7 +23,8 @@ import {
   CloseModal,
   CloseModalBtn,
   ButtonNavegate,
-  IconCardContainer
+  IconCardContainer,
+  LogoutIconContainer
 } from './styles';
 
 import baseURL from '../../services/baseURL';
@@ -39,7 +40,7 @@ const Dashboard: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       console.log('Dashboard ==================================================');
-      console.log(user);      
+      console.log(user);
     }, [])
   );
 
@@ -65,50 +66,54 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Header colors={['#a03c3e', '#771e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-        <UserContainer>
-          <UserInfo onPress={() => setProfileIsVisible(true)}>
-            <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
-            <UserSaudation>
-              {user.name && <FirstSaudation>Olá, <UserName>{user?.name.split(' ')[0]}!</UserName></FirstSaudation>}
-              <Matricule>Matrícula: {user.matricula}</Matricule>
-            </UserSaudation>
-            <Modal visible={profileIsVisible} >
-              <CloseModal>
-                <CloseModalBtn onPress={() => setProfileIsVisible(false)}>
-                  <Feather size={22} color="#fff" name="x" />
-                </CloseModalBtn>
-              </CloseModal>
-              <Profile />
-            </Modal>
-          </UserInfo>
-          <Icon name="power" onPress={confirmLogout} />
-        </UserContainer>
-      </Header>
+    <>
+      <Container>
+        <Header colors={['#fff', '#fff']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <UserContainer>
+            <UserInfo onPress={() => setProfileIsVisible(true)}>
+              <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
+              <UserSaudation>
+                {user.name && <FirstSaudation>Olá, <UserName>{user?.name}!</UserName></FirstSaudation>}
+                <Matricule>Matrícula: {user.matricula}</Matricule>
+              </UserSaudation>
+            </UserInfo>
+            <LogoutIconContainer>
+              <Icon name="power" onPress={confirmLogout} />
+            </LogoutIconContainer>
+          </UserContainer>
+          <CardsHome>
+            <ButtonNavegate activeOpacity={1} onPress={() => alert("a")} style={{ backgroundColor: '#e9ebfa' }} >
+              <IconCardContainer>
+                <Feather size={30} color="#751c20" name="user-check" />
+              </IconCardContainer>
+              <Text>Chamada</Text>
+            </ButtonNavegate>
+            <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }} style={{ backgroundColor: '#e9f4ea' }}>
+              <IconCardContainer>
+                <Feather size={30} color="#751c20" name="book" />
+              </IconCardContainer>
+              <Text>Relatório</Text>
+            </ButtonNavegate>
+            <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }} style={{ backgroundColor: '#f7eae5' }}>
+              <IconCardContainer>
+                <Feather size={30} color="#751c20" name="settings" onPress={() => setProfileIsVisible(true)} />
+              </IconCardContainer>
+              <Text>Ajustes</Text>
+            </ButtonNavegate>
+          </CardsHome>
+        </Header>
 
-      <CardsHome>
-        <ButtonNavegate activeOpacity={1} onPress={() => alert("a")} >
-          <IconCardContainer>
-            <Feather size={30} color="#751c20" name="user-check" />
-          </IconCardContainer>
-          <Text>Chamada</Text>
-        </ButtonNavegate>
-        <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }}>
-          <IconCardContainer>
-            <Feather size={30} color="#751c20" name="book" />
-          </IconCardContainer>
-          <Text>Relatório</Text>
-        </ButtonNavegate>
-        <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }}>
-          <IconCardContainer>
-            <Feather size={30} color="#751c20" name="settings" onPress={() => setProfileIsVisible(true)} />
-          </IconCardContainer>
-          <Text>Ajustes</Text>
-        </ButtonNavegate>
-      </CardsHome>
-
-    </Container>
+      </Container>
+      {/* MODALS ========================== */}
+      <Modal visible={profileIsVisible} >
+        <CloseModal>
+          <CloseModalBtn onPress={() => setProfileIsVisible(false)}>
+            <Feather size={22} color="#fff" name="x" />
+          </CloseModalBtn>
+        </CloseModal>
+        <Profile />
+      </Modal>
+    </>
   );
 }
 
