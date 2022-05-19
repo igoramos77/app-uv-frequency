@@ -57,10 +57,11 @@ export const CloseModalBtn = styled(TouchableOpacity)`
 export const Avatar = styled.Image`
   width: ${RFValue(64)}px;
   height: ${RFValue(64)}px;
-  border-radius: 65px;
+  border-radius: 8px;
   margin-bottom: 16px;
   position: absolute;
   right: 20;
+  top: 10;
 `;
 
 export const UserSaudation = styled.View`

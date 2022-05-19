@@ -92,7 +92,9 @@ const Dashboard: React.FC = () => {
       <Container>
         <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
           <UserContainer>
-            <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
+            <Avatar 
+              source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+            />
             <UserInfo onPress={() => setProfileIsVisible(true)}>
               <UserSaudation>
                 <Hi>Olá,</Hi>

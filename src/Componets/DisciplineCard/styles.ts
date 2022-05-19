@@ -32,5 +32,7 @@ export const Footer = styled.View`
 `;
 
 export const Date = styled.Text`
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

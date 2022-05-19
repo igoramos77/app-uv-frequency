@@ -3,6 +3,8 @@ import React from 'react';
 //@ts-ignore
 import ProgressBar from "react-native-animated-progress";
 
+import Feather from '@expo/vector-icons/build/Feather';
+
 import { Container, Title, ProgressBarContainer, Footer, Date } from './styles';
 
 interface ICardProps {
@@ -33,7 +35,10 @@ const DisciplineCard: React.FC<ICardProps> = ({ onPress, }) => {
       />
     </ProgressBarContainer>
     <Footer>
-      <Date>Quinta-feira / 20h</Date>
+      <Date>
+        <Feather size={14} color="#731e21" name="calendar" style={{ paddingRight: 5, }} /> 
+        Quinta-feira / 20h
+      </Date>
     </Footer>
   </Container>
   );
