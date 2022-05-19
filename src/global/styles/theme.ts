@@ -13,7 +13,7 @@ export default {
     subtitle: '#adafca',
     text: '#969cb2',
     placeholder: '#c3c3c3',
-    background: '#E5E5E5',
+    background: '#edeef5',
     dark_bakground: '#2A4069',
   },
 

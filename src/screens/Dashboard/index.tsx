@@ -2,8 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { Text, Alert, Modal } from 'react-native';
+import { Text, Alert, Modal, Dimensions } from 'react-native';
 
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
 
 import Profile from '../Profile';
 
@@ -18,19 +26,24 @@ import {
   Matricule,
   UserName,
   Icon,
-  CardsHome,
   NotFound,
   CloseModal,
   CloseModalBtn,
-  ButtonNavegate,
-  IconCardContainer,
-  LogoutIconContainer
+  LogoutIconContainer,
+  Hi,
+  GraphContainer,
+  GraphInner,
+  GraphTitle,
+  H1,
+  CardsContainer,
+  CardsContaineScroll
 } from './styles';
 
 import baseURL from '../../services/baseURL';
 import { useAuth } from '../../hooks/auth';
 import Feather from '@expo/vector-icons/build/Feather';
 import MySends from '../MySends';
+import DisciplineCard from '../../Componets/DisciplineCard';
 
 
 const Dashboard: React.FC = () => {
@@ -65,43 +78,101 @@ const Dashboard: React.FC = () => {
     );
   };
 
+  const data = [
+    20,
+    10,
+    40,
+    50,
+    10,
+    20,
+  ]
+
   return (
     <>
       <Container>
-        <Header colors={['#fff', '#fff']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+        <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
           <UserContainer>
+            <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
             <UserInfo onPress={() => setProfileIsVisible(true)}>
-              <Avatar source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }} />
               <UserSaudation>
-                {user.name && <FirstSaudation>Olá, <UserName>{user?.name}!</UserName></FirstSaudation>}
+                <Hi>Olá,</Hi>
+                {user.name && <FirstSaudation><UserName>{user?.name}!</UserName></FirstSaudation>}
                 <Matricule>Matrícula: {user.matricula}</Matricule>
               </UserSaudation>
             </UserInfo>
-            <LogoutIconContainer>
+            {/* <LogoutIconContainer>
               <Icon name="power" onPress={confirmLogout} />
-            </LogoutIconContainer>
+            </LogoutIconContainer> */}
           </UserContainer>
-          <CardsHome>
-            <ButtonNavegate activeOpacity={1} onPress={() => alert("a")} style={{ backgroundColor: '#e9ebfa' }} >
-              <IconCardContainer>
-                <Feather size={30} color="#751c20" name="user-check" />
-              </IconCardContainer>
-              <Text>Chamada</Text>
-            </ButtonNavegate>
-            <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }} style={{ backgroundColor: '#e9f4ea' }}>
-              <IconCardContainer>
-                <Feather size={30} color="#751c20" name="book" />
-              </IconCardContainer>
-              <Text>Relatório</Text>
-            </ButtonNavegate>
-            <ButtonNavegate activeOpacity={1} onPress={() => { alert('a') }} style={{ backgroundColor: '#f7eae5' }}>
-              <IconCardContainer>
-                <Feather size={30} color="#751c20" name="settings" onPress={() => setProfileIsVisible(true)} />
-              </IconCardContainer>
-              <Text>Ajustes</Text>
-            </ButtonNavegate>
-          </CardsHome>
         </Header>
+
+        <GraphContainer style={{
+          shadowColor: '#00000050',
+          shadowOffset: {width: 2, height: 10},
+          shadowRadius: 20,
+          shadowOpacity: 0.3,
+          elevation: 1
+        }}>
+          <GraphInner>
+            <GraphTitle>Assiduidade Semanal</GraphTitle>
+            <BarChart
+              data={{
+                labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+                datasets: [
+                  {
+                    data: data,
+                  }
+                ]
+              }}
+              width={Dimensions.get("window").width} // from react-native
+              height={220}
+              fromZero={true}
+              withHorizontalLabels={false}
+              withInnerLines={false}
+              showBarTops={false}
+              showValuesOnTopOfBars={false}
+              yAxisLabel=""
+              yAxisSuffix=""
+              yAxisInterval={1} // optional, defaults to 1
+              chartConfig={{
+                backgroundColor: "#fff",
+                backgroundGradientFrom: "#fff",
+                backgroundGradientTo: "#fff",
+                backgroundGradientFromOpacity: 0,
+                backgroundGradientToOpacity: 0,
+                decimalPlaces: 2,
+                barPercentage: 1,
+                color: (opacity = 1) => `rgba(54,64,81, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(54,64,81, ${opacity})`,
+                barRadius: 8,
+                style: {
+                  borderRadius: 16
+                },
+                propsForDots: {
+                  r: "6",
+                  strokeWidth: "2",
+                  stroke: "#ffa726"
+                }
+              }}
+              style={{
+                marginVertical: 8,
+                borderRadius: 16,
+                marginLeft: -72,
+              }}
+            />
+          </GraphInner>
+        </GraphContainer>
+        
+        <H1>Suas disciplinas</H1>
+
+        <CardsContainer>
+          <CardsContaineScroll>
+            <DisciplineCard onPress={() => alert('1')} />
+            <DisciplineCard onPress={() => alert('2')} />
+            <DisciplineCard />
+            <DisciplineCard />
+          </CardsContaineScroll>
+        </CardsContainer>
 
       </Container>
       {/* MODALS ========================== */}
