@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
             </FormControl>
             <FormControl>
               <Label>Nome completo</Label>
-              <Input value={`${user.first_name} ${user.last_name}`} editable={false} disabled />
+              <Input value={`${user?.first_name} ${user.last_name}`} editable={false} disabled />
             </FormControl>
             <FormControl>
               <Label>E-mail</Label>

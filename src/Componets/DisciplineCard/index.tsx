@@ -11,7 +11,8 @@ interface ICardProps {
   onPress?(): void;
 }
 
-const DisciplineCard: React.FC<ICardProps> = ({ onPress, }) => {
+export default function DisciplineCard({ onPress, }: ICardProps) {
+
   return (
   <Container 
     onPress={onPress} 
@@ -43,5 +44,3 @@ const DisciplineCard: React.FC<ICardProps> = ({ onPress, }) => {
   </Container>
   );
 }
-
-export default DisciplineCard;

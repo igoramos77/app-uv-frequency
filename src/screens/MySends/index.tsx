@@ -1,20 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { Text, Alert, Modal } from 'react-native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { Text, Alert, Modal, Switch } from 'react-native';
+import Feather from '@expo/vector-icons/build/Feather';
+import { format, formatDistance, formatRelative, parseISO, subDays } from 'date-fns';
 
 import api from '../../services/api';
 
-import { 
+import {
   Container,
-  LastActivesContent,
-  LastActivesTitle,
-  NotFound,
-  Header, 
+  Header,
   TitleHeader,
+  DateChangeContainer,
+  DayOfMouthContainer,
+  DayNumber,
+  Btn,
+  ArrowContainer,
+  Day,
+  Footer,
+  ContainerIntro,
+  Row,
+  Avatar,
+  Name,
+  AvatarContainer,
+  DayEx,
+  SwitchContainer,
+  StateTextLeft,
+  StateTextRight,
+  Fake,
+  DisciplineTitle,
+  BackButtonContianer,
 } from './styles';
 
 import { useAuth } from '../../hooks/auth';
-
+import { ptBR } from 'date-fns/locale';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Button from '../../Componets/Forms/Button';
 interface IActivitiesProps {
   id: number;
   external_id: string;
@@ -34,10 +54,23 @@ interface IActivitiesProps {
   categoria: number;
 }
 
-const MySends: React.FC = () => {
+interface IParamsProps {
+  id: string;
+}
+
+export default function MySends({ }) {
+  const navigation = useNavigation();
   const { user } = useAuth();
   const [activities, setActivities] = useState<IActivitiesProps[]>([]);
 
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const route = useRoute();
+  const { id } = route.params as IParamsProps;
+
+
+/* 
   useFocusEffect(
     useCallback(() => {
       async function loadData() {
@@ -49,32 +82,498 @@ const MySends: React.FC = () => {
       loadData();
     }, [])
   );
-
+ */
   return (
     <Container>
-      <Header colors={['#6e61c6', '#a98ef3']} start={{ x: 0, y: 0}} end={{x: 1, y: 1}}>
-        <TitleHeader>Histórico de Envios</TitleHeader>
+      <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+        <BackButtonContianer>
+          <Feather size={32} color="#fff" name="chevron-left"  style={{marginLeft: 20 }} onPress={ () => { navigation.goBack() }} />
+        </BackButtonContianer>
+        <DateChangeContainer>
+          <ArrowContainer>
+            <Btn>
+              <Text>
+                <Feather size={14} color="#fff" name="chevron-left" style={{ fontSize: 25, }} />
+              </Text>
+            </Btn>
+          </ArrowContainer>
+          <DayOfMouthContainer>
+            <DayNumber>
+              21
+            </DayNumber>
+          </DayOfMouthContainer>
+          <ArrowContainer>
+            <Btn>
+              <Text>
+                <Feather size={14} color="#fff" name="chevron-right" style={{ fontSize: 25, }} />
+              </Text>
+            </Btn>
+          </ArrowContainer>
+        </DateChangeContainer>
       </Header>
+      <Footer>
+        <Day>terça-feira</Day>
+        <DayEx>{format(parseISO('2021-08-30'), 'PPP', { locale: ptBR })}</DayEx>
+      </Footer>
 
-      {activities && activities.length > 0 ? 
-        <LastActivesContent>
-          {activities.map((activitie, index) => (
-            <LastActivesCard
-              key={index}
-              title={activitie.descricao}
-              value={activitie.carga_horaria_integralizada || activitie.carga_horaria_informada}
-              status={activitie.status}
-              date={activitie.create_at}
-              certificado_img={activitie.certificado}
-            />
-          ))}
-        </LastActivesContent>
-      :
-        <NotFound>Poxa, você ainda não submeteu nenhuma atividade 😢</NotFound>
-      }
-      
-    </Container>  
+
+      <ContainerIntro>
+        <DisciplineTitle>Lab de Empreededorismo id: {id}</DisciplineTitle>
+        <KeyboardAwareScrollView extraHeight={500}>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+          <Row style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+            <AvatarContainer>
+              <Avatar
+                source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+              />
+              <Name>Igor Brown</Name>
+
+            </AvatarContainer>
+            <SwitchContainer>
+              <StateTextLeft>F</StateTextLeft>
+              <Switch
+                trackColor={{ false: '#ccc', true: '#ccc' }}
+                thumbColor={isEnabled ? '#781e20' : '#f4f3f4'}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                />
+                <StateTextRight>P</StateTextRight>
+            </SwitchContainer>
+          </Row>
+            <Button
+            background="primary"
+            title="Registrar presença!"
+            onPress={() => {
+              Alert.alert('Presença confirmada com sucesso! 😊');
+              navigation.goBack();
+            }} 
+          />
+          <Fake>
+          </Fake>
+        </KeyboardAwareScrollView>
+
+
+
+      </ContainerIntro>
+
+
+    </Container>
   );
 }
-
-export default MySends;

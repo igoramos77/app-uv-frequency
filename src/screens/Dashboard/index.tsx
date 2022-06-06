@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { Text, Alert, Modal, Dimensions } from 'react-native';
 
@@ -40,13 +40,14 @@ import {
 } from './styles';
 
 import baseURL from '../../services/baseURL';
-import { useAuth } from '../../hooks/auth';
+import { IUserProps, useAuth } from '../../hooks/auth';
 import Feather from '@expo/vector-icons/build/Feather';
-import MySends from '../MySends';
 import DisciplineCard from '../../Componets/DisciplineCard';
+import fullName from '../../utils/fullNameFormart';
 
 
-const Dashboard: React.FC = () => {
+export default function Dashboard() {
+  const navigation = useNavigation();
   const { signOut, user } = useAuth();
   const [profileIsVisible, setProfileIsVisible] = useState(false);
 
@@ -92,13 +93,13 @@ const Dashboard: React.FC = () => {
       <Container>
         <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
           <UserContainer>
-            <Avatar 
+            <Avatar
               source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
             />
             <UserInfo onPress={() => setProfileIsVisible(true)}>
               <UserSaudation>
                 <Hi>Olá,</Hi>
-                {user.name && <FirstSaudation><UserName>{user?.name}!</UserName></FirstSaudation>}
+                {user.name && <FirstSaudation><UserName>{fullName(user?.name)}!</UserName></FirstSaudation>}
                 <Matricule>Matrícula: {user.matricula}</Matricule>
               </UserSaudation>
             </UserInfo>
@@ -110,7 +111,7 @@ const Dashboard: React.FC = () => {
 
         <GraphContainer style={{
           shadowColor: '#00000050',
-          shadowOffset: {width: 2, height: 10},
+          shadowOffset: { width: 2, height: 10 },
           shadowRadius: 20,
           shadowOpacity: 0.3,
           elevation: 1
@@ -164,14 +165,11 @@ const Dashboard: React.FC = () => {
             />
           </GraphInner>
         </GraphContainer>
-        
-        <H1>Suas disciplinas</H1>
 
+        <H1>Minhas disciplinas</H1>
         <CardsContainer>
           <CardsContaineScroll>
-            <DisciplineCard onPress={() => alert('1')} />
-            <DisciplineCard onPress={() => alert('2')} />
-            <DisciplineCard />
+            <DisciplineCard onPress={() => navigation.navigate('MySends', { id: '123' })} />
             <DisciplineCard />
           </CardsContaineScroll>
         </CardsContainer>
@@ -189,5 +187,3 @@ const Dashboard: React.FC = () => {
     </>
   );
 }
-
-export default Dashboard;

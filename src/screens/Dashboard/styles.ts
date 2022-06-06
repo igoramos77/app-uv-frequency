@@ -164,7 +164,7 @@ export const GraphTitle = styled.Text`
   width: 100%;
   display: flex;
   color: #3c3c3c;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   margin: 16px 0 0 20px;
   font-family: ${props => props.theme.fonts.medium};
@@ -175,7 +175,7 @@ export const H1 = styled.Text`
   width: 100%;
   display: flex;
   color: #3c3c3c;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   margin: 16px 0 16px 30px;
   font-family: ${props => props.theme.fonts.medium};

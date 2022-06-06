@@ -18,7 +18,7 @@ import { Text, Image, Alert } from 'react-native';
 
 import axios from 'axios';
 
-const Login: React.FC = () => {
+export default function Login() {
   const { signIn, setLogged } = useAuth();
 
   const [matricula, setMatricula] = useState('');
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
     try {
       const response = await api.post('/auth', {
         matricula: matricula,
-        password: senha
+        password: senha,
       });
 
       console.log('=========================== START =========================');
@@ -71,7 +71,7 @@ const Login: React.FC = () => {
       }
 
     } catch (error: any) {
-      console.log(error);
+      console.log('error:: ', error);
       Alert.alert('Matrícula ou senha inválidos!');
     }
   }, [matricula, senha]);
@@ -142,5 +142,3 @@ const Login: React.FC = () => {
     </Container>
   );
 }
-
-export default Login;
