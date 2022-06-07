@@ -9,9 +9,10 @@ import { Container, Title, ProgressBarContainer, Footer, Date } from './styles';
 
 interface ICardProps {
   onPress?(): void;
+  code: string;
 }
 
-export default function DisciplineCard({ onPress, }: ICardProps) {
+export default function DisciplineCard({ onPress, code }: ICardProps) {
 
   return (
   <Container 
@@ -38,7 +39,7 @@ export default function DisciplineCard({ onPress, }: ICardProps) {
     <Footer>
       <Feather size={14} color="#731e21" name="calendar" style={{  marginRight: 4 }} /> 
       <Date>
-        Quinta-feira / 20h
+        {code}
       </Date>
     </Footer>
   </Container>

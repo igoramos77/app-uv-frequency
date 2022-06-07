@@ -44,12 +44,22 @@ import { IUserProps, useAuth } from '../../hooks/auth';
 import Feather from '@expo/vector-icons/build/Feather';
 import DisciplineCard from '../../Componets/DisciplineCard';
 import fullName from '../../utils/fullNameFormart';
+import api from '../../services/api';
+
+interface IClassesProps {
+  id: string;
+  code: string;
+  subject: string;
+  date: Date;
+}
 
 
 export default function Dashboard() {
   const navigation = useNavigation();
   const { signOut, user } = useAuth();
   const [profileIsVisible, setProfileIsVisible] = useState(false);
+
+  const [classes, setClasses] = useState<IClassesProps[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -67,9 +77,21 @@ export default function Dashboard() {
     20,
   ]
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await api.get(`${baseURL}/api/users/${user.id}/classes`);
+        console.log(response.data);
+        setClasses(response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
   return (
     <>
-    {user.role === 'student' ? (
+      {user.role === 'professor' ? (
         <Container>
           <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
             <UserContainer>
@@ -146,21 +168,26 @@ export default function Dashboard() {
             </GraphInner>
           </GraphContainer>
 
-          <H1>Minhas disciplinas</H1>
+          <H1>Minhas turmas</H1>
           <CardsContainer>
             <CardsContaineScroll>
-              <DisciplineCard onPress={() => navigation.navigate('MySends' as never, { id: '123' } as never)} />
-              <DisciplineCard />
+              {classes.map((classe, index) => (
+                <DisciplineCard
+                  key={index}
+                  onPress={() => navigation.navigate('MySends' as never, { id: classe.id, subject: classe.subject } as never)}
+                  code={classe.code}
+                />
+              ))}
             </CardsContaineScroll>
           </CardsContainer>
 
         </Container>
-    ) : 
-    (
-      <View style={{flex: 1, backgroundColor: 'red', display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
-        <Text>role: {user.role}</Text>
-      </View>
-    )}
+      ) :
+        (
+          <View style={{ flex: 1, backgroundColor: 'red', display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+            <Text>role: {user.role}</Text>
+          </View>
+        )}
 
       {/* MODALS ========================== */}
       <Modal visible={profileIsVisible} >

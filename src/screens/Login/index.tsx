@@ -43,7 +43,7 @@ export default function Login() {
 
   const handleLogin = useCallback(async () => {
     try {
-      const response = await api.post('/auth', {
+      const response = await api.post('/api/auth/token', {
         matricula: matricula,
         password: senha,
       });
@@ -67,8 +67,11 @@ export default function Login() {
         await response.data.token,
       );
 
+      //const token =  await response.data.token;
+      //console.log('tokennnnnnn: ', token)
+
       if (response.status === 200) {
-        await AsyncStorage.setItem('@user', JSON.stringify({ matricula: matricula, password: senha }))
+        await AsyncStorage.setItem('@user', JSON.stringify({ matricula: matricula, password: senha }));
       }
 
       setLogged(true);
