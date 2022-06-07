@@ -36,8 +36,8 @@ export default function DisciplineCard({ onPress, }: ICardProps) {
       />
     </ProgressBarContainer>
     <Footer>
+      <Feather size={14} color="#731e21" name="calendar" style={{  marginRight: 4 }} /> 
       <Date>
-        <Feather size={14} color="#731e21" name="calendar" style={{ paddingRight: 5, }} /> 
         Quinta-feira / 20h
       </Date>
     </Footer>

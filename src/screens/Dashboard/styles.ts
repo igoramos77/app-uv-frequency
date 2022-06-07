@@ -38,7 +38,7 @@ export const UserInfo = styled(TouchableOpacity)`
 export const CloseModal = styled.View`
   top: 60px;
   position: absolute;
-  left: 20;
+  left: 20px;
   width: 50px;
   height: 50px;
   z-index: 9999;
@@ -60,8 +60,8 @@ export const Avatar = styled.Image`
   border-radius: 8px;
   margin-bottom: 16px;
   position: absolute;
-  right: 20;
-  top: 10;
+  right: 20px;
+  top: 10px;
 `;
 
 export const UserSaudation = styled.View`

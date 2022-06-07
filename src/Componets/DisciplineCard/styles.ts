@@ -28,11 +28,13 @@ export const ProgressBarContainer = styled.View`
 `;
 
 export const Footer = styled.View`
-  
+  display: flex;
+  flex-direction: row;
 `;
 
 export const Date = styled.Text`
   display: flex;
   justify-content: center;
+  align-items: center;
   align-items: center;
 `;

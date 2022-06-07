@@ -19,18 +19,17 @@ export const H1 = styled.Text`
   font-size: 26px;
   color: #fff;
   font-family: ${props => props.theme.fonts.bold};
-`;
-
-export const H2 = styled.Text`
-  color: #fff;
-  font-size: 11px;
   margin-bottom: 120px;
 `;
 
-export const Strong = styled.Text`
-  color: #fff;
+export const H2 = styled.Text`
+  font-size: 11px;
+  width: 100%;
+  text-align: center;
+  margin-top: 16px;
   font-family: ${props => props.theme.fonts.bold};
 `;
+
 
 export const FormControl = styled.View`
   margin: ${RFValue(6)}px 0;

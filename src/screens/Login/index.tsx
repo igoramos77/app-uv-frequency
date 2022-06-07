@@ -50,7 +50,7 @@ export default function Login() {
 
       console.log('=========================== START =========================');
       console.log(response.data.token);
-      console.log(response.data.user);
+      console.log('USER:::::::::::::::', response.data.user);
       console.log('=========================== END =========================');
 
       axios.defaults.headers.common = { 'Authorization': `Bearer ${response.data.token}` }
@@ -62,17 +62,21 @@ export default function Login() {
         await response.data.user.email,
         await response.data.user.photoUrl,
         await response.data.user.courseId,
-        await response.data.token,
+        await response.data.user.role,
         await response.data.expires_in,
+        await response.data.token,
       );
 
       if (response.status === 200) {
         await AsyncStorage.setItem('@user', JSON.stringify({ matricula: matricula, password: senha }))
       }
 
+      setLogged(true);
+
     } catch (error: any) {
       console.log('error:: ', error);
       Alert.alert('Matrícula ou senha inválidos!');
+      setLogged(false);
     }
   }, [matricula, senha]);
 

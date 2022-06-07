@@ -2,10 +2,11 @@ import React from 'react';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { Container, Header, H1, H2, Strong, BigContainer, FormControl, FormContainer, BigAvatar, Form, Label, Footer } from './styles';
+import { Container, Header, H1, H2, BigContainer, FormControl, FormContainer, BigAvatar, Form, Label, Footer } from './styles';
 import { useAuth } from '../../hooks/auth';
 import Input from '../../Componets/Forms/Input';
 import Button from '../../Componets/Forms/Button';
+import { Alert } from 'react-native';
 
 interface IUserProps {
   id: number,
@@ -18,18 +19,37 @@ interface IUserProps {
 }[]
 
 const Profile: React.FC = () => {
-  const { user } =  useAuth();
+  const { user, signOut } =  useAuth();
+
+  const confirmLogout = () => {
+    return Alert.alert(
+      "Deseja descontectar do App?",
+      "Você poderá voltar quando quiser.",
+      [
+        // The "Yes" button
+        {
+          text: "Sair",
+          onPress: () => {
+            signOut();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "Não",
+        },
+      ]
+    );
+  };
 
   return (
     <Container>
-      <Header colors={['#5E72E4', '#5E72E4']} start={{ x: 0, y: 0}} end={{x: 1, y: 1}} />
+      <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0}} end={{x: 1, y: 1}} />
 
       <BigContainer>
-        <H1>Olá, {user.first_name}!</H1>
-        <H2><Strong>Matrícula:</Strong> {user.matricula}</H2>
+        <H1>Olá, {user.name.split(" ")[0]}!</H1>
         <FormContainer>
-          <BigAvatar source={{ uri: user.foto }} />
-
+          <BigAvatar source={{ uri: user.photoUrl }} />
           <Form>
             <FormControl>
               <Label>Matrícula</Label>
@@ -37,7 +57,7 @@ const Profile: React.FC = () => {
             </FormControl>
             <FormControl>
               <Label>Nome completo</Label>
-              <Input value={`${user?.first_name} ${user.last_name}`} editable={false} disabled />
+              <Input value={`${user.name}`} editable={false} disabled />
             </FormControl>
             <FormControl>
               <Label>E-mail</Label>
@@ -45,12 +65,13 @@ const Profile: React.FC = () => {
             </FormControl>
             <FormControl>
               <Button title="Atualizar perfil!" background="primary" />
+              <H2 onPress={confirmLogout}>Desconectar?</H2>
             </FormControl>
           </Form>
         </FormContainer>
       </BigContainer>
 
-      <Footer>Summa 2021 - Todos os direitos reservasos</Footer>
+      <Footer>UFrequency 2022 - Todos os direitos reservasos</Footer>
     </Container>
   );
 }

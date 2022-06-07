@@ -11,6 +11,7 @@ export interface IUserProps {
   courseId: string,
   token: string,
   expires_in: string,
+  role: string;
 }
 
 interface IAuthContext {
@@ -26,6 +27,7 @@ interface IAuthContext {
     courseId: string,
     token: string,
     expires_in: string,
+    role: string,
   ): void;
 
   signOut(): void;
@@ -46,7 +48,7 @@ const AuthProvider: React.FC = ({ children }) => {
     return !!isLogged;
   }); */
 
-  const signIn = useCallback(async (id, name, matricula, email, photoUrl, courseId, token, expires_in) => {
+  const signIn = useCallback(async (id, name, matricula, email, photoUrl, courseId, role, token, expires_in) => {
     await AsyncStorage.setItem('@token', JSON.stringify({ token: token, expires_in: expires_in }));
 
     setUser({
@@ -58,12 +60,14 @@ const AuthProvider: React.FC = ({ children }) => {
       courseId: courseId,
       token: token,
       expires_in: expires_in,
+      role: role,
     })
     
     setLogged(true);
   }, []);
 
   const signOut = useCallback(() => {
+    AsyncStorage.clear();
     AsyncStorage.removeItem('@token');
     setLogged(false);
   }, []);
