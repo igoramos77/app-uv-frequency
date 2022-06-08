@@ -9,6 +9,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from
 import theme from './src/global/styles/theme';
 import { AuthProvider } from './src/hooks/auth';
 
+console.disableYellowBox = true;
 
 export default function App() {
   const [fontsLoaded] = useFonts({

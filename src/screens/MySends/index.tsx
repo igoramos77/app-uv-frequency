@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { Text, Alert, Modal, Switch, View, ActivityIndicator } from 'react-native';
 import Feather from '@expo/vector-icons/build/Feather';
-import { format, formatDistance, formatRelative, parseISO, subDays } from 'date-fns';
+import { format, parseISO, isPast } from 'date-fns';
+
 
 
 import api from '../../services/api';
@@ -137,8 +138,16 @@ export default function MySends({ }) {
   }, [dayIndex]);
 
   useEffect(() => {
-    console.log(dayIndex)
-  }, [dayIndex]);
+    for (let index = 0; index < lectures.length; index++) {
+      if (!isPast(parseISO(lectures[index].date))) {
+        setDayIndex(index);
+        return;
+      }
+      else {
+        setDayIndex(lectures.length - 1 || 0);
+      }
+    }
+  }, [lectures]);
 
   useEffect(() => {
     (async () => {
@@ -212,14 +221,14 @@ export default function MySends({ }) {
         </Footer>
 
         <ContainerIntro>
-          <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{height: '100%'}}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ height: '100%' }}>
             {loading ? (
-              <View style={{display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '200%' }}>
+              <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '200%' }}>
                 <ActivityIndicator size="large" color="#ccc" />
               </View>
-              ) : (
-                <>
-                <DisciplineTitle>{subject}</DisciplineTitle>
+            ) : (
+              <>
+                <DisciplineTitle>{lecture.subject?.name}</DisciplineTitle>
                 {lecture.attendance && lecture.attendance.map((student, index) => (
                   <UserFrequency
                     key={index}
