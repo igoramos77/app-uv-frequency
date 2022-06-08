@@ -11,7 +11,7 @@ export const Container = styled(TextInput)<IInputProps>`
   width: 100%;
   padding: 20px 16px;
   font-size: ${RFValue(12)}px;
-  background: ${props => props.disabled ? '#E5E5E5' : props.theme.colors.shape};
+  background: #E5E5E5;
   color: ${props => props.disabled ? '#969CB2' : props.theme.colors.text};
   font-family: ${props => props.theme.fonts.regular};
   border-radius: 5px;

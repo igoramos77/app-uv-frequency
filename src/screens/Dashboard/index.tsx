@@ -101,13 +101,10 @@ export default function Dashboard() {
               <UserInfo onPress={() => setProfileIsVisible(true)}>
                 <UserSaudation>
                   <Hi>Olá,</Hi>
-                  {user.name && <FirstSaudation><UserName>{fullName(user?.name)}!</UserName></FirstSaudation>}
+                  {user.name && <FirstSaudation><UserName>{user?.name.split(" ")[0]}!</UserName></FirstSaudation>}
                   <Matricule>Matrícula: {user.matricula}</Matricule>
                 </UserSaudation>
               </UserInfo>
-              {/* <LogoutIconContainer>
-                <Icon name="power" onPress={confirmLogout} />
-              </LogoutIconContainer> */}
             </UserContainer>
           </Header>
 

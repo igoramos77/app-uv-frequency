@@ -17,6 +17,7 @@ export interface IUserProps {
 interface IAuthContext {
   logged: boolean;
   setLogged: React.Dispatch<React.SetStateAction<boolean>>;
+  updateUser(userData: IUserProps): void;
 
   signIn(
     id: number,
@@ -72,8 +73,12 @@ const AuthProvider: React.FC = ({ children }) => {
     setLogged(false);
   }, []);
 
+  const updateUser = useCallback((userData: IUserProps) => {
+    setUser(userData);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{logged, setLogged, signIn, signOut, user}}>
+    <AuthContext.Provider value={{logged, setLogged, signIn, signOut, user, updateUser}}>
       {children}
     </AuthContext.Provider>
   )

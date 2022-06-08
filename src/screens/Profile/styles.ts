@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
@@ -81,4 +82,8 @@ export const Footer = styled.Text`
   width: 100%;
   text-align: center;
   margin-top: 20px;
+`;
+
+export const AvatarContainer = styled(TouchableOpacity)`
+  
 `;

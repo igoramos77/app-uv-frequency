@@ -232,7 +232,7 @@ export default function MySends({ }) {
                 {lecture.attendance && lecture.attendance.map((student, index) => (
                   <UserFrequency
                     key={index}
-                    style={{ borderBottomWidth: 1, borderBottomColor: '#ccc' }}
+                    style={index < lecture.attendance.length - 1 && { borderBottomWidth: 1, borderBottomColor: '#ececec' }}
                     photoUrl={student.photoUrl}
                     name={student.name}
                     isPresent={student.presence}
