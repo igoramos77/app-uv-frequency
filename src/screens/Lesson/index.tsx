@@ -1,25 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { Avatar, AvatarContainer, BackButtonContianer, CardsContaineScroll, Container, ContainerIntro, Header, HeaderContainer, Teacher, Title, Title2, Topic, TopicContainer } from './styles';
 
 import Feather from '@expo/vector-icons/build/Feather';
 import { LinearGradient } from 'expo-linear-gradient';
+import api from '../../services/api';
+
+interface IParamsProps {
+  id: string;
+  coverUrl: string;
+  subject: string;
+  professor: {
+    name: string;
+    photoUrl: string;
+  };
+}
+
+export interface ILeacturesProps {
+  class_id: string;
+  content: string;
+  date: string;
+  id: string;
+}
+
 
 const Lesson: React.FC = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const [lectures, setLectures] = useState<ILeacturesProps[]>([]);
+
+  const { id, coverUrl, subject, professor } = route.params as IParamsProps;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await api.get(`/api/classes/${id}/lectures`);
+        console.log(response.data);
+        setLectures(response.data)
+      } catch (error: any) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   return (
     <Container>
       <Header
-        source={{ uri: 'https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99' }}
+        source={{ uri: coverUrl }}
         blurRadius={0}
       >
         <HeaderContainer>
-          <Title>Padrões de Projeto</Title>
-          <Teacher>Tássio Auad</Teacher>
+          <Title>{subject}</Title>
+          <Teacher>{professor.name}</Teacher>
         </HeaderContainer>
         <LinearGradient
           colors={['transparent', '#000000d0']}
@@ -38,7 +74,7 @@ const Lesson: React.FC = () => {
         </BackButtonContianer>
         <AvatarContainer>
           <Avatar
-            source={{ uri: "https://github.com/tassioauad.png" }}
+            source={{ uri: professor.photoUrl }}
           />
         </AvatarContainer>
       </Header>
@@ -47,35 +83,14 @@ const Lesson: React.FC = () => {
         <Title2>Aulas</Title2>
         <SafeAreaView>
           <CardsContaineScroll>
-
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-            <TopicContainer style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}>
-              <Topic>Padrões de projeto</Topic>
-            </TopicContainer>
-
+            {lectures.map((lecure, index) => (
+              <TopicContainer
+                key={index}
+                style={{ borderBottomWidth: 1, borderBottomColor: '#ececec' }}
+              >
+                <Topic>Aula {index + 1} - {lecure.content}</Topic>
+              </TopicContainer>
+            ))}
           </CardsContaineScroll>
         </SafeAreaView>
       </ContainerIntro>

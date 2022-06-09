@@ -28,7 +28,7 @@ interface IAuthContext {
     courseId: string,
     token: string,
     expires_in: string,
-    role: string,
+    role: 'student' | 'professor',
   ): void;
 
   signOut(): void;

@@ -48,9 +48,17 @@ interface IClassesProps {
   id: string;
   code: string;
   subject: string;
+  photoUrl: string;
+  attendanceCount: number;
+  lessonsCount: number;
+  professor: {
+    id: string;
+    name: string;
+    photoUrl: string;
+  }
   date: {
     date: string;
-  };
+  }
 }
 
 
@@ -60,6 +68,7 @@ export default function Dashboard() {
   const [profileIsVisible, setProfileIsVisible] = useState(false);
 
   const [classes, setClasses] = useState<IClassesProps[]>([]);
+  const [classesProfessor, setClassesProfessor] = useState<IClassesProps[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -78,16 +87,33 @@ export default function Dashboard() {
   ];
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await api.get(`${baseURL}/api/users/${user.id}/classes`);
-        console.log(response.data);
-        setClasses(response.data)
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+    if (user.role === 'student') {
+      (async () => {
+        try {
+          const response = await api.get(`${baseURL}/api/users/${user.id}/student/classes`);
+          console.log(response.data);
+          setClasses(response.data)
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [user.id]);
+
+  useEffect(() => {
+    if (user.role === 'professor') { 
+      (async () => {
+        try {
+          const response = await api.get(`${baseURL}/api/users/${user.id}/classes`);
+          console.log(response.data);
+          setClassesProfessor(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [user.id]);
+
 
   return (
     /* ======================================== PROFESSOR ======================================== */
@@ -169,7 +195,7 @@ export default function Dashboard() {
           <H1>Minhas turmas</H1>
           <CardsContainer>
             <CardsContaineScroll>
-              {classes.map((classe, index) => (
+              {classesProfessor.map((classe, index) => (
                 <DisciplineCard
                   key={index}
                   onPress={() => navigation.navigate('MySends' as never, { id: classe.id, subject: classe.subject } as never)}
@@ -204,50 +230,23 @@ export default function Dashboard() {
             </Header>
 
             <ContainerIntro>
-              <Title>Minhas disciplinas (8)</Title>
+              <Title>Minhas disciplinas ({classes.length})</Title>
               <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ height: '100%', }}>
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-                <DisciplineCardStudent
-                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
-                  avatarUrl="https://github.com/tassioauad.png"
-                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
-                />
-
-
+                {classes.map((classe, index) => (
+                  <DisciplineCardStudent
+                    key={index}
+                    coverUrl={classe.photoUrl}
+                    dayOfWeek={classe.date.date}
+                    lessonsCount={classe.lessonsCount}
+                    attendanceCount={classe.attendanceCount}
+                    professor={classe.professor}
+                    subject={classe.subject}
+                    onPress={() => navigation.navigate('Disciplina' as never, { id: classe.id, coverUrl: classe.photoUrl, subject: classe.subject, professor: classe.professor } as never)}
+                  />
+                ))}
                 <Fake />
               </KeyboardAwareScrollView>
             </ContainerIntro>
-
-
           </Container>
         )
         /* ======================================== STUDENT ======================================== */

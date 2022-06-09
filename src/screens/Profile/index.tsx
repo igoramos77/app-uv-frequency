@@ -55,46 +55,58 @@ const Profile: React.FC = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.2,
       base64: true,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-
       try {
-        const response = await api.put(``);
+        const response = await api.put(`/api/users/${user.id}/photo`, {
+          photo: `data:image/jpeg;base64,` + result.base64,
+        });
         console.log(response.data);
 
         if (response.status === 200) {
           setImage(result.uri);
+          console.log(response.data);
+          updateUser({
+            ...user,
+            photoUrl: result.uri
+          });
         }
       } catch (error) {
         console.log(error);
         Alert.alert('Ops! Não foi possível alerar a sua foto. 📷')
       }
     }
-  }, []);
+  }, [image, user, setImage]);
+
+ 
 
   const handleUpdateProfile = useCallback(async () => {
     try {
-      //const response = await api.put(``);
-      //console.log(response.data);
+      const response = await api.put(`/api/users/${user.id}`, {
+        name: name,
+        email: email,
+      });
+      console.log(response.data);
       updateUser({
         ...user,
         name: name,
         email: email,
       });
-      Alert.alert('Perfil atualizado com sucesso!')
-     /*  if (response.status === 200) {
-        
-      } */
+      if (response.status === 200) {
+        Alert.alert('Perfil atualizado com sucesso!')
+      }
     } catch (error) {
       console.log(error);
       Alert.alert('Ops! Não foi possível alterar o perfil.')
     }
   }, [updateUser, user, name, email]);
+
+
 
   return (
     <Container>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Text, Alert, Modal, Switch, View, ActivityIndicator } from 'react-native';
 import Feather from '@expo/vector-icons/build/Feather';
-import { format, parseISO, isPast } from 'date-fns';
+import { format, parseISO, isPast, addDays } from 'date-fns';
 
 import api from '../../services/api';
 
@@ -137,7 +137,7 @@ export default function MySends({ }) {
 
   useEffect(() => {
     for (let index = 0; index < lectures.length; index++) {
-      if (!isPast(parseISO(lectures[index].date))) {
+      if (!isPast(addDays(parseISO(lectures[index].date), 1))) {
         setDayIndex(index);
         return;
       }
@@ -181,6 +181,24 @@ export default function MySends({ }) {
       }
     })();
   }, [lectures, dayIndex]);
+
+  const handleSendAttendence = useCallback(async () => {
+    try {
+      const response = await api.put(`/api/lectures/${lecture.id}/attendance`, {
+        attendance: lecture.attendance,
+      });
+      console.log(response.data);
+
+      if (response.status === 200) {
+        Alert.alert('Presença confirmada com sucesso! 😊');
+        navigation.goBack();
+      }
+
+    } catch (error: any) {
+      console.log(error.message);
+      Alert.alert('Ops! algo deu errado.')
+    }
+  }, [lecture.id, lecture.attendance]);
 
   return (
     <>
@@ -258,41 +276,7 @@ export default function MySends({ }) {
                 <Button
                   background="primary"
                   title="Registrar presença!"
-                  onPress={() => {
-                    Alert.alert('Presença confirmada com sucesso! 😊');
-                    navigation.goBack();
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log('RESULT =======================================================')
-                    console.log({
-                      id: lecture.id,
-                      lecture: lecture.attendance,
-                    })
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                    console.log('FIM RESULT =======================================================')
-                  }}
+                  onPress={handleSendAttendence}
                 />
               </>
             )}

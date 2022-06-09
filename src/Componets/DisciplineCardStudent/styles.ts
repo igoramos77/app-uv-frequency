@@ -53,6 +53,7 @@ export const Topics = styled.Text`
 export const Day = styled.Text`
   color: ${props => props.theme.colors.title};
   font-family: ${({ theme }) => theme.fonts.bold};
+  text-transform: capitalize;
 `;
 
 export const Teacher = styled.Text`
