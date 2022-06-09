@@ -133,11 +133,11 @@ export default function Login() {
 
         <Form>
           <FormControl>
-            <Input placeholder="Matrícula" keyboardType='number-pad' onChangeText={(text) => setMatricula(text)} onFocus={onFaceId} />
+            <Input placeholder="Matrícula" keyboardType='number-pad' onChangeText={(text) => setMatricula(text)} onFocus={onFaceId} background="#fff" />
             <Feather size={24} color="#CBD1EB" name="user" style={{ position: 'absolute', zIndex: 99999, right: 16 }} />
           </FormControl>
           <FormControl>
-            <Input placeholder="Senha" secureTextEntry={true} onChangeText={(text) => setSenha(text)} />
+            <Input placeholder="Senha" secureTextEntry={true} onChangeText={(text) => setSenha(text)} background="#fff" />
             <Feather size={24} color="#CBD1EB" name="lock" style={{ position: 'absolute', zIndex: 99999, right: 16 }} />
           </FormControl>
           <FormControl>

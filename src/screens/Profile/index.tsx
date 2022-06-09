@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 
-import { Container, Header, H1, H2, BigContainer, FormControl, FormContainer, BigAvatar, Form, Label, Footer, AvatarContainer } from './styles';
+import { Container, Header, H1, H2, BigContainer, FormControl, FormContainer, BigAvatar, Form, Label, AvatarContainer } from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useAuth } from '../../hooks/auth';
 import Input from '../../Componets/Forms/Input';
@@ -9,6 +9,7 @@ import Button from '../../Componets/Forms/Button';
 import { Alert, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import api from '../../services/api';
+import Footer from '../../Componets/Footer';
 
 const Profile: React.FC = () => {
   const { user, updateUser, signOut } = useAuth();
@@ -100,7 +101,7 @@ const Profile: React.FC = () => {
       <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} />
 
       <BigContainer>
-        <H1 numberOfLines={1} ellipsizeMode='head'>Olá, {user.name}!</H1>
+        <H1>{user.name}</H1>
         <FormContainer>
           <AvatarContainer activeOpacity={1} onPress={handleImportImage}>
             <BigAvatar source={{ uri: image }} />
@@ -128,7 +129,7 @@ const Profile: React.FC = () => {
         </FormContainer>
       </BigContainer>
 
-      <Footer>UFrequency 2022 - Todos os direitos reservasos</Footer>
+      <Footer />
     </Container>
   );
 }

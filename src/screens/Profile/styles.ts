@@ -20,7 +20,7 @@ export const H1 = styled.Text`
   font-size: 26px;
   color: #fff;
   font-family: ${props => props.theme.fonts.bold};
-  margin-bottom: 120px;
+  margin-bottom: 110px;
 `;
 
 export const H2 = styled.Text`
@@ -43,7 +43,7 @@ export const BigContainer = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: ${RFValue(-200)}px;
+  margin-top: ${RFValue(-180)}px;
 `;
 
 export const FormContainer = styled.View`
@@ -59,8 +59,8 @@ export const FormContainer = styled.View`
 export const BigAvatar = styled.Image`
   margin-top: ${RFValue(-70)}px; 
   margin-bottom: ${RFValue(10)}px; 
-  width: ${RFValue(177)}px;
-  height: ${RFValue(177)}px;
+  width: ${RFValue(160)}px;
+  height: ${RFValue(160)}px;
   border-radius: 10px;
 `;
 
@@ -71,17 +71,9 @@ export const Form = styled.View`
 
 export const Label = styled.Text`
   font-size: 12px;
-  color: #969CB2;
+  font-family: ${props => props.theme.fonts.bold};
+  color: ${props => props.theme.colors.title};
   margin: 4px 8px 8px 8px;
-`;
-
-export const Footer = styled.Text`
-  font-size: 10px;
-  color: ${props => props.theme.colors.text}90;
-  display: flex;
-  width: 100%;
-  text-align: center;
-  margin-top: 20px;
 `;
 
 export const AvatarContainer = styled(TouchableOpacity)`

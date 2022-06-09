@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Text, Alert, Modal, Switch, View, ActivityIndicator } from 'react-native';
 import Feather from '@expo/vector-icons/build/Feather';
 import { format, parseISO, isPast } from 'date-fns';
-
-
 
 import api from '../../services/api';
 

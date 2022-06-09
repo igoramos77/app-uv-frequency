@@ -45,9 +45,9 @@ export const CloseModal = styled.View`
 `;
 
 export const CloseModalBtn = styled(TouchableOpacity)`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
   background: #ffffff20;
   display: flex;
   justify-content: center;
@@ -163,29 +163,30 @@ export const GraphInner = styled.View`
 export const GraphTitle = styled.Text`
   width: 100%;
   display: flex;
-  color: #3c3c3c;
+  color: ${props => props.theme.colors.title};
   justify-content: flex-start;
   align-items: center;
   margin: 16px 0 0 20px;
-  font-family: ${props => props.theme.fonts.medium};
-  font-size: ${RFValue(14)}px;
+  font-family: ${props => props.theme.fonts.bold};
+  font-size: ${RFValue(16)}px;
 `;
 
 export const H1 = styled.Text`
   width: 100%;
   display: flex;
-  color: #3c3c3c;
+  color: ${props => props.theme.colors.title};
   justify-content: flex-start;
   align-items: center;
   margin: 16px 0 16px 30px;
-  font-family: ${props => props.theme.fonts.medium};
-  font-size: ${RFValue(14)}px;
+  font-family: ${props => props.theme.fonts.bold};
+  font-size: ${RFValue(16)}px;
 `;
 
 export const CardsContainer = styled.View`
   width: 100%;
   display: flex;
   padding: 10px;
+  
 `;
 
 export const CardsContaineScroll = styled.ScrollView.attrs({
@@ -200,4 +201,28 @@ export const CardsContaineScroll = styled.ScrollView.attrs({
   padding: 0 24px;
   flex-direction: row;
   width: 110%;
+`;
+
+export const ContainerIntro = styled.View`
+  padding: 30px;
+  background: #fff;
+  border-radius: 20px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  top: -100px;
+`;
+
+export const Fake = styled.View`
+  height: 270px;
+`;
+
+export const Title = styled.Text`
+  width: 100%;
+  display: flex;
+  color: ${props => props.theme.colors.title};
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 0 20px 4px;
+  font-family: ${props => props.theme.fonts.bold};
+  font-size: ${RFValue(14)}px;
 `;

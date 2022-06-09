@@ -2,16 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-import { Text, Alert, Modal, Dimensions, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
-} from "react-native-chart-kit";
+import { Text, Modal, Dimensions, View } from 'react-native';
+
+import { BarChart } from "react-native-chart-kit";
 
 import Profile from '../Profile';
 
@@ -36,21 +31,26 @@ import {
   GraphTitle,
   H1,
   CardsContainer,
-  CardsContaineScroll
+  CardsContaineScroll,
+  ContainerIntro,
+  Fake,
+  Title
 } from './styles';
 
 import baseURL from '../../services/baseURL';
-import { IUserProps, useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/auth';
 import Feather from '@expo/vector-icons/build/Feather';
 import DisciplineCard from '../../Componets/DisciplineCard';
-import fullName from '../../utils/fullNameFormart';
 import api from '../../services/api';
+import DisciplineCardStudent from '../../Componets/DisciplineCardStudent';
 
 interface IClassesProps {
   id: string;
   code: string;
   subject: string;
-  date: Date;
+  date: {
+    date: string;
+  };
 }
 
 
@@ -75,7 +75,7 @@ export default function Dashboard() {
     50,
     10,
     20,
-  ]
+  ];
 
   useEffect(() => {
     (async () => {
@@ -90,6 +90,7 @@ export default function Dashboard() {
   }, []);
 
   return (
+    /* ======================================== PROFESSOR ======================================== */
     <>
       {user.role === 'professor' ? (
         <Container>
@@ -173,18 +174,84 @@ export default function Dashboard() {
                   key={index}
                   onPress={() => navigation.navigate('MySends' as never, { id: classe.id, subject: classe.subject } as never)}
                   code={classe.code}
+                  subject={classe.subject}
+                  date={classe.date}
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
                 />
               ))}
             </CardsContaineScroll>
           </CardsContainer>
-
         </Container>
-      ) :
+      )
+        /* ======================================== END PROFESSOR ======================================== */
+        :
+        /* ======================================== STUDENT ======================================== */
         (
-          <View style={{ flex: 1, backgroundColor: 'red', display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
-            <Text>role: {user.role}</Text>
-          </View>
-        )}
+          <Container>
+            <Header colors={['#781e20', '#781e20']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <UserContainer>
+                <Avatar
+                  source={user.photoUrl ? { uri: user.photoUrl } : { uri: "https://pbs.twimg.com/profile_images/1498067523299852297/KnrB7S9v_400x400.jpg" }}
+                />
+                <UserInfo onPress={() => setProfileIsVisible(true)}>
+                  <UserSaudation>
+                    <Hi>Olá,</Hi>
+                    {user.name && <FirstSaudation><UserName>{user?.name.split(" ")[0]}!</UserName></FirstSaudation>}
+                    <Matricule>Matrícula: {user.matricula}</Matricule>
+                  </UserSaudation>
+                </UserInfo>
+              </UserContainer>
+            </Header>
+
+            <ContainerIntro>
+              <Title>Minhas disciplinas (8)</Title>
+              <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ height: '100%', }}>
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+                <DisciplineCardStudent
+                  coverUrl="https://www.somosicev.com/wp-content/themes/iCEV-1.0/thumb.php?src=https://www.somosicev.com/wp-content/uploads/2020/02/shutterstock_1490302805-1-e1582805634356.jpg&w=460&h=320&zc=6&q=99"
+                  avatarUrl="https://github.com/tassioauad.png"
+                  onPress={() => navigation.navigate('Disciplina' as never, { id: '1' } as never)}
+                />
+
+
+                <Fake />
+              </KeyboardAwareScrollView>
+            </ContainerIntro>
+
+
+          </Container>
+        )
+        /* ======================================== STUDENT ======================================== */
+      }
 
       {/* MODALS ========================== */}
       <Modal visible={profileIsVisible} >
