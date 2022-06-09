@@ -87,7 +87,9 @@ interface ILeactureProps {
 
 interface IParamsProps {
   id: string;
+  isGraphNavigation: boolean;
   subject: string;
+  date: string;
 }
 
 export default function MySends({ }) {
@@ -104,7 +106,7 @@ export default function MySends({ }) {
 
 
   const route = useRoute();
-  const { id, subject } = route.params as IParamsProps;
+  const { id, isGraphNavigation, date } = route.params as IParamsProps;
 
   const backDay = useCallback(() => {
     if (dayIndex >= 0) {
@@ -136,13 +138,24 @@ export default function MySends({ }) {
   }, [dayIndex]);
 
   useEffect(() => {
-    for (let index = 0; index < lectures.length; index++) {
-      if (!isPast(addDays(parseISO(lectures[index].date), 1))) {
-        setDayIndex(index);
-        return;
+    if (isGraphNavigation) {
+      console.log('idddddddddddddddddddddddddddddddddddddddddddd: ', id);
+      const idx = lectures.findIndex((lecture) => lecture.date === date);
+
+      if (idx !== -1) {
+        setDayIndex(idx);
       }
-      else {
-        setDayIndex(lectures.length - 1 || 0);
+      console.log(idx)
+    }
+    else {
+      for (let index = 0; index < lectures.length; index++) {
+        if (!isPast(addDays(parseISO(lectures[index].date), 1))) {
+          setDayIndex(index);
+          return;
+        }
+        else {
+          setDayIndex(lectures.length - 1 || 0);
+        }
       }
     }
   }, [lectures]);

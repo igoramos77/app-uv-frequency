@@ -4,9 +4,9 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { Text, Modal, Dimensions, View } from 'react-native';
+import { Modal, Dimensions, Alert, View } from 'react-native';
 
-import { BarChart } from "react-native-chart-kit";
+import { ContributionGraph } from "react-native-chart-kit";
 
 import Profile from '../Profile';
 
@@ -34,7 +34,10 @@ import {
   CardsContaineScroll,
   ContainerIntro,
   Fake,
-  Title
+  Title,
+  DevelopersContainer,
+  DevelopersBtn,
+  DevelopersBtnText
 } from './styles';
 
 import baseURL from '../../services/baseURL';
@@ -43,7 +46,8 @@ import Feather from '@expo/vector-icons/build/Feather';
 import DisciplineCard from '../../Componets/DisciplineCard';
 import api from '../../services/api';
 import DisciplineCardStudent from '../../Componets/DisciplineCardStudent';
-
+import { addDays, parseISO } from 'date-fns';
+import About from '../About';
 interface IClassesProps {
   id: string;
   code: string;
@@ -61,30 +65,41 @@ interface IClassesProps {
   }
 }
 
+interface IChartProps {
+  id: string;
+  subject: string;
+  date: string;
+  count: number;
+}
 
 export default function Dashboard() {
   const navigation = useNavigation();
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
   const [profileIsVisible, setProfileIsVisible] = useState(false);
+  const [modalAboutIsVisible, setModalAboutIsVisible] = useState(false);
 
   const [classes, setClasses] = useState<IClassesProps[]>([]);
   const [classesProfessor, setClassesProfessor] = useState<IClassesProps[]>([]);
+  const [dataChart, setDataChart] = useState<IChartProps[]>([]);
+
+  const [newEndDate, setNewEndDate] = useState<Date>();
 
   useFocusEffect(
     useCallback(() => {
-      console.log('Dashboard ==================================================');
-      console.log(user);
+      (async () => {
+        try {
+          const response = await api.get(`/api/users/${user.id}/chart`);
+          console.log(response.data);
+          setDataChart(response.data);
+
+          const endDate1 = String(dataChart[dataChart.length - 1].date);
+          setNewEndDate(parseISO(endDate1));
+        } catch (error: any) {
+          console.log(error);
+        }
+      })();
     }, [])
   );
-
-  const data = [
-    20,
-    10,
-    40,
-    50,
-    10,
-    20,
-  ];
 
   useEffect(() => {
     if (user.role === 'student') {
@@ -92,7 +107,8 @@ export default function Dashboard() {
         try {
           const response = await api.get(`${baseURL}/api/users/${user.id}/student/classes`);
           console.log(response.data);
-          setClasses(response.data)
+          setClasses(response.data);
+
         } catch (error) {
           console.log(error);
         }
@@ -101,7 +117,7 @@ export default function Dashboard() {
   }, [user.id]);
 
   useEffect(() => {
-    if (user.role === 'professor') { 
+    if (user.role === 'professor') {
       (async () => {
         try {
           const response = await api.get(`${baseURL}/api/users/${user.id}/classes`);
@@ -114,6 +130,15 @@ export default function Dashboard() {
     }
   }, [user.id]);
 
+  const handleToolTip: any = {};
+
+  const handleKeyPress = useCallback((id, subject, count, date) => {
+    if (count !== 0) {
+      navigation.navigate('MySends' as never, { id: id, subject: subject, isGraphNavigation: true, date: date } as never)
+    } else {
+      Alert.alert(`Nenhuma presença registrada para o dia ${date.toLocaleString('pt-BR').split(" ")[0]}`)
+    }
+  }, []);
 
   return (
     /* ======================================== PROFESSOR ======================================== */
@@ -143,26 +168,17 @@ export default function Dashboard() {
             elevation: 1
           }}>
             <GraphInner>
-              <GraphTitle>Assiduidade Semanal</GraphTitle>
-              <BarChart
-                data={{
-                  labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
-                  datasets: [
-                    {
-                      data: data,
-                    }
-                  ]
-                }}
-                width={Dimensions.get("window").width} // from react-native
-                height={220}
-                fromZero={true}
-                withHorizontalLabels={false}
-                withInnerLines={false}
-                showBarTops={false}
-                showValuesOnTopOfBars={false}
-                yAxisLabel=""
-                yAxisSuffix=""
-                yAxisInterval={1} // optional, defaults to 1
+              <GraphTitle>Controle de Frequência</GraphTitle>
+              <ContributionGraph
+                values={dataChart}
+                tooltipDataAttrs={(value) => handleToolTip}
+                //@ts-ignore
+                onDayPress={({ id, subject, count, date }) => handleKeyPress(id, subject, count, date)}
+                endDate={newEndDate && addDays(newEndDate, (29 + new Date().getDay()))}
+                numDays={112}
+                width={Dimensions.get("window").width - 0}
+                height={200}
+
                 chartConfig={{
                   backgroundColor: "#fff",
                   backgroundGradientFrom: "#fff",
@@ -183,16 +199,11 @@ export default function Dashboard() {
                     stroke: "#ffa726"
                   }
                 }}
-                style={{
-                  marginVertical: 8,
-                  borderRadius: 16,
-                  marginLeft: -72,
-                }}
               />
             </GraphInner>
           </GraphContainer>
 
-          <H1>Minhas turmas</H1>
+          <H1>Minhas Turmas</H1>
           <CardsContainer>
             <CardsContaineScroll>
               {classesProfessor.map((classe, index) => (
@@ -207,6 +218,11 @@ export default function Dashboard() {
               ))}
             </CardsContaineScroll>
           </CardsContainer>
+          <DevelopersContainer>
+            <DevelopersBtn>
+              <DevelopersBtnText onPress={() => setModalAboutIsVisible(true)}>Desenvolvido por: Igor, Lucas e Guilherme.</DevelopersBtnText>
+            </DevelopersBtn>
+          </DevelopersContainer>
         </Container>
       )
         /* ======================================== END PROFESSOR ======================================== */
@@ -230,7 +246,7 @@ export default function Dashboard() {
             </Header>
 
             <ContainerIntro>
-              <Title>Minhas disciplinas ({classes.length})</Title>
+              <Title>Minhas Disciplinas ({classes.length})</Title>
               <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ height: '100%', }}>
                 {classes.map((classe, index) => (
                   <DisciplineCardStudent
@@ -247,6 +263,11 @@ export default function Dashboard() {
                 <Fake />
               </KeyboardAwareScrollView>
             </ContainerIntro>
+            <DevelopersContainer>
+              <DevelopersBtn>
+                <DevelopersBtnText onPress={() => setModalAboutIsVisible(true)}>Desenvolvido por: Igor, Lucas e Guilherme.</DevelopersBtnText>
+              </DevelopersBtn>
+            </DevelopersContainer>
           </Container>
         )
         /* ======================================== STUDENT ======================================== */
@@ -260,6 +281,15 @@ export default function Dashboard() {
           </CloseModalBtn>
         </CloseModal>
         <Profile />
+      </Modal>
+
+      <Modal visible={modalAboutIsVisible} >
+        <CloseModal>
+          <CloseModalBtn onPress={() => setModalAboutIsVisible(false)}>
+            <Feather size={22} color="#fff" name="x" />
+          </CloseModalBtn>
+        </CloseModal>
+        <About />
       </Modal>
     </>
   );

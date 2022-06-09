@@ -154,8 +154,8 @@ export const GraphInner = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px;
-  height: 290px;
+  padding: 0px;
+  height: 270px;
   border-radius: 8px;
   background: #fff;
 `;
@@ -164,11 +164,11 @@ export const GraphTitle = styled.Text`
   width: 100%;
   display: flex;
   color: ${props => props.theme.colors.title};
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  margin: 16px 0 0 20px;
+  text-align: center;
   font-family: ${props => props.theme.fonts.bold};
-  font-size: ${RFValue(16)}px;
+  font-size: ${RFValue(18)}px;
 `;
 
 export const H1 = styled.Text`
@@ -194,6 +194,7 @@ export const CardsContaineScroll = styled.ScrollView.attrs({
   showsHorizontalScrollIndicator: false,
   contentContainerStyle: {
     paddingRight: 50,
+    height: 190,
   }
 })`
   position: absolute;
@@ -225,4 +226,28 @@ export const Title = styled.Text`
   margin: 0 0 20px 4px;
   font-family: ${props => props.theme.fonts.bold};
   font-size: ${RFValue(14)}px;
+`;
+
+export const DevelopersContainer = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  bottom: 16px;
+  position: absolute;
+  justify-content: center;
+  text-align: center;
+`;
+
+export const DevelopersBtn = styled.TouchableOpacity`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  bottom: 20px;
+  position: absolute;
+  justify-content: center;
+  text-align: center;
+`;
+
+export const DevelopersBtnText = styled.Text`
+  color: ${props => props.theme.colors.title}50;
 `;

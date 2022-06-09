@@ -27,11 +27,7 @@ export default function DisciplineCard({ onPress, code, coverUrl, subject, date 
     <Container
       onPress={onPress}
       style={{
-        shadowColor: '#00000050',
-        shadowOffset: { width: 2, height: 10 },
-        shadowRadius: 20,
-        shadowOpacity: 0.3,
-        elevation: 1
+        
       }}
       activeOpacity={1}
     >
@@ -48,7 +44,7 @@ export default function DisciplineCard({ onPress, code, coverUrl, subject, date 
           </Date>
           <Feather size={14} color={theme.colors.title} name="clock" style={{ marginLeft: 16, marginRight: 4 }} />
           <Date>
-            20h
+            19h
           </Date>
         </Footer>
       </Content>
